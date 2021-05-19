@@ -12,9 +12,9 @@
 
 ### Boost
 
-1. [Գլուխ 32։ Boost.Asio](boost/translated/ch32.md)
+1. [Գլուխ 32։ Boost.Asio](translated/boost/ch32.md)
 
 
 ### Swift
 
-1. [Swift լեզվի ներածություն](swift/a-swift-tour.md)
+1. [Swift լեզվի ներածություն](translated/swift/a-swift-tour.md)
