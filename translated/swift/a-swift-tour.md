@@ -1,4 +1,4 @@
-# Ծանոթություն Swift լեզվին
+# Swift լեզվի ներածություն
 
 _Թարգմանված է [A Swift Tour](https://docs.swift.org/swift-book/GuidedTour/GuidedTour.html)-ից_
 
@@ -222,3 +222,126 @@ print(total)
 ```
 
 `..<` օպերատորը օգտագործեք կիսափակ (վերին եզրը չընդգրկող) միջակայք ստեղծելու համար, իսկ `...` օպերատորը՝ փակ միջակայքի համար։
+
+
+## Ֆունկցիաներ և Closure-ներ
+
+Ֆունկցիա սահմանելու համար օգտագործեք `func` բառը։ Ֆունկցիան կանչեք նրա անունից հետո կլոր փակագծերում տալով արգումենտների ցուցակը։ `->` նշանակմամբ առանձնացրեք ֆունկցիայի պարամետրերի անուններն ու տիպերը դրա վերադարձվող արժեքի տիպից։
+
+```Switch
+func greet(person: String, day: String) -> String {
+    return "Hello \(person), today is \(day)."
+}
+greet(person: "Bob", day: "Tuesday")
+```
+
+
+> __Վարժություն։__ Հեռացրեք `day` պարամետրը։ Add a parameter to include today’s lunch special in the greeting. ??
+
+Լռելությամբ ֆունկցիաներն իրենց պարամետրերի անուններն օգտագործում են որպես արգումենտների պիտակներ։ Պարամետրի անունից առաջ կարող եք գրել ձեր պիտակը, կամ գրեք `_`՝ պիտակի օգտագործումից հրաժարվելու համար։
+
+```Swift
+func greet(_ person: String, on day: String) -> String {
+    return "Hello \(person), today is \(day)."
+}
+greet("John", on: "Wednesday")
+```
+
+Բաղադրյալ արժեք ստեղծելու համար օգտագործեք tuple (n-յակ). օրինակ, ֆունկցիայից մի քանի արժեք վերադարձնելու համար։ N-յակի տարրերին կարելի է դիմել կամ անունով, կամ համարով։
+
+```Swift
+func calculateStatistics(scores: [Int]) -> (min: Int, max: Int, sum: Int) {
+    var min = scores[0]
+    var max = scores[0]
+    var sum = 0
+
+    for score in scores {
+        if score > max {
+            max = score
+        } else if score < min {
+            min = score
+        }
+        sum += score
+    }
+
+    return (min, max, sum)
+}
+let statistics = calculateStatistics(scores: [5, 3, 100, 3, 9])
+print(statistics.sum)
+// Prints "120"
+print(statistics.2)
+// Prints "120"
+```
+
+Ֆունկցիաները կարող են ներդրված լինել։ Ներդրված ֆունցկիաներին հասանելի են այն արտաքին ֆունկցիայի փոփոխականները, որում ինքը հայտարարված է։ Ներդրված ֆունկցիաները կարող եք օգտագործել երկար կամ բարդ ֆունկցիաների կոդը վերակազմակերպելու համար։
+
+```Swift
+func returnFifteen() -> Int {
+    var y = 10
+    func add() {
+        y += 5
+    }
+    add()
+    return y
+}
+returnFifteen()
+```
+
+Ֆունկցիաները առաջին դասի տիպեր են։ Սա նշանակում է, որ ֆունկցիան կարող է որպես արժեք վերադարձնել մի այլ ֆունկցիա։
+
+```Swift
+func makeIncrementer() -> ((Int) -> Int) {
+    func addOne(number: Int) -> Int {
+        return 1 + number
+    }
+    return addOne
+}
+var increment = makeIncrementer()
+increment(7)
+```
+
+Ֆունկցիան կարող է իր արգումենտներում ստանալ մի որևէ այլ ֆունկցիա։
+
+```Swift
+func hasAnyMatches(list: [Int], condition: (Int) -> Bool) -> Bool {
+    for item in list {
+        if condition(item) {
+            return true
+        }
+    }
+    return false
+}
+func lessThanTen(number: Int) -> Bool {
+    return number < 10
+}
+var numbers = [20, 19, 7, 12]
+hasAnyMatches(list: numbers, condition: lessThanTen)
+```
+
+Ֆունկցան իրականում closure-ի տեսակ է. այն կոդի բլոկ է, որը կարելի է կանչել ավելի ուշ։ Closure-ի կոդին հասանելի են այն բաները, ինչպիսիք են փոփոխականներն ու ֆունկցիաները, որոնք հասանելի էին այն տիրույթում (scope), որտեղ closure-ն ստեղծվել է, նույնիսկ եթե closure-ը կատարվում է այլ տիրույթում. սրա օրինակն արդեն դուք տեսաք ներդրված ֆունկցիաների դեպքում։ Կարող եք առանց անունի closure սահմանել՝ դրա կոդն ընդգրկելով ձևավոր փակագծերում (`{}`)։ `in` բառով անջատեք արգումենտներն ու վերադարձվող արժեքի տիպը մարմնից։
+
+```Swift
+numbers.map({ (number: Int) -> Int in
+    let result = 3 * number
+    return result
+})
+```
+
+> __Վարժություն։__ Ձևափոխեք closure-ն այնպես, որ այն զրո վերադարձնի բոլոր կենտ թվերի համար։
+
+Դուք closure-ները ավելի համառոտ սահմանելու մի քանի հնարավորություն ունեք։ Եթե closure-ի տիպն արդեն հայտնի է, such as the callback for a delegate, ապա դուք կարող եք բաց թողնել պարամետրերի տիպըեր, վերադարձվող արժեքի տիպը կամ երկուսն էլ միասին։ Միակ հրաման պարունակող closure-ը անուղղակիորեն վերադարձնում է իր այդ միակ հրամանի արժեքը։
+
+```Swift
+let mappedNumbers = numbers.map({ number in 3 * number })
+print(mappedNumbers)
+// Prints "[60, 57, 21, 36]"
+```
+
+Անունների փոխարեն պարամետրերը կարելի է օգտագործել նաև դրանց համարները. այս մոտեցումը հատկապես օգտակար է կարճ closure-ներն օգտագործելիս։ Որպես ֆունկցիայի վերջին արգումենտ փոխանցվող closure-ը կարող է գրառվել անմիջապես արգումենտների փակագծերից հետո։ Եթե closure-ը ֆունկցիայի միակ արգումենտն է, ապա կարող եք ամբողջությամբ բաց թողնել նաև փակագծերը։
+
+```Swift
+let sortedNumbers = numbers.sorted { $0 > $1 }
+print(sortedNumbers)
+// Prints "[20, 19, 12, 7]"
+```
+
