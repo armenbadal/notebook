@@ -228,7 +228,7 @@ print(total)
 
 Ֆունկցիա սահմանելու համար օգտագործեք `func` բառը։ Ֆունկցիան կանչեք նրա անունից հետո կլոր փակագծերում տալով արգումենտների ցուցակը։ `->` նշանակմամբ առանձնացրեք ֆունկցիայի պարամետրերի անուններն ու տիպերը դրա վերադարձվող արժեքի տիպից։
 
-```Switch
+```Swift
 func greet(person: String, day: String) -> String {
     return "Hello \(person), today is \(day)."
 }
@@ -368,3 +368,163 @@ var shape = Shape()
 shape.numberOfSides = 7
 var shapeDescription = shape.simpleDescription()
 ```
+
+`Shape` դասի այս տարբերակում մի կարևոր բան բացակայում է. սկզբնարժեքավորումը, երբ նմուշն է ստեղծվում։ Դրա համար օգտագործեք `init`-ը։
+
+```Swift
+class NamedShape {
+    var numberOfSides: Int = 0
+    var name: String
+
+    init(name: String) {
+        self.name = name
+    }
+
+    func simpleDescription() -> String {
+        return "A shape with \(numberOfSides) sides."
+    }
+}
+```
+
+Ուշադրություն դարձրեք, թե ինչպես է `self`-ը օգտագործվում `name` արգումենտով `name` հատկությունն արժեքավորելու համար։ Դասի նմուշը ստեղծելիս սկզբնարժեքավորիչին արգումենտները փոխանցվում են ճիշտ նույն կերպ, ինչպես փոխանցվում են ֆունկցիայի կանչի ժամանակ։ Յուրաքանչյուր հատկություն պետք է արժեք ստանա կամ հայտարարության մեջ (ինչպես `numberOfSides`-ը), կամ սկզբնարժեքավորիչում (ինչպես `name`-ը)։
+
+Օբյեկտի ոչնչացումից առաջ ինչ-որ մաքրություն անելու համար օգտագործեք `deinit`-ը։ 
+
+Ենթադաս սահմանելիս գերդասի անունը գրվում է սահմանվող դասի անունից հետո՝ բաժանված `:`-ով։ Պարտադիր չէ, որ սահմանվող դասը ժառանգի ինչ-որ ստանդարտ բազային դաս, այսինքն՝ կարող եք բազային դասի անունը գրել կամ չգրել։
+
+Ենթադասի այն մեթոդները, որոնք վերասահմանում (override) են բազային դասի մեթոդի իրականացումը, նշվում են `override` բառով. առանց `override` բառի մեթոդի պատահական վերասահմանումը կոմպիլյատորի կողմից դիտարկվում է որպես սխալ։ Կոմպիլյատորը նաև հայտնաբերում է `override` բառով նշված այն մեթոդները, որոնք իրականում ոչ մի մեթոդ էլ չեն վերասահմանում։
+
+```Swift
+class Square: NamedShape {
+    var sideLength: Double
+
+    init(sideLength: Double, name: String) {
+        self.sideLength = sideLength
+        super.init(name: name)
+        numberOfSides = 4
+    }
+
+    func area() -> Double {
+        return sideLength * sideLength
+    }
+
+    override func simpleDescription() -> String {
+        return "A square with sides of length \(sideLength)."
+    }
+}
+let test = Square(sideLength: 5.2, name: "my test square")
+test.area()
+test.simpleDescription()
+```
+
+> __Վարժություն։__ `NamedShape` դասից ժառանգեք `Circle` անունով ևս մի դաս, որի արժեքավորիչի արգումենտներն են շառավիղն ու անունը։ `Circle` դասի համար իրականացրեք `area()` և `simpleDescription()` մեթոդները։
+
+Ի լրումն հասարակ հատկությունների, կարող ենք սահմանել նաև `get` ու `set` մեթոդներով հատկություններ։
+
+```Swift
+class EquilateralTriangle: NamedShape {
+    var sideLength: Double = 0.0
+
+    init(sideLength: Double, name: String) {
+        self.sideLength = sideLength
+        super.init(name: name)
+        numberOfSides = 3
+    }
+
+    var perimeter: Double {
+        get {
+            return 3.0 * sideLength
+        }
+        set {
+            sideLength = newValue / 3.0
+        }
+    }
+
+    override func simpleDescription() -> String {
+        return "An equilateral triangle with sides of length \(sideLength)."
+    }
+}
+var triangle = EquilateralTriangle(sideLength: 3.1, name: "a triangle")
+print(triangle.perimeter)
+// Prints "9.3"
+triangle.perimeter = 9.9
+print(triangle.sideLength)
+// Prints "3.3000000000000003"
+```
+
+`perimeter`-ի set բլոկին փոխանցված նոր արժեքն ունի `newValue` ենթադրվող անունը։ Այլ անուն կարող եք տալ՝ `set` բառից հետո փակագծերում նշելով։
+
+Ուշադրություն դարձրեք, որ `EquilateralTriangle`-ի արժեքավորիչը պարունակում է երեք տարբեր քայլեր.
+
+1. Արժեքներ վերագրել ենթադասի հայտարարած հատկություններին։
+2. Կանչել գերդասի արժեքավորիչը.
+3. Գերդասում սահմանված հատկությունների արժեքների փոփոխում։ Ցանկացած այլ գործ, որ օգտագործում է մեթոդներ, `set`-եր կամ `get`-եր, նույնպես կարող է կատարվել ասյ կետում։
+
+Եթե չեք ուզում հաշվարկել հատկության արժեքը, բայց այնումաենայնիվ ուզում եք գրել կոդ, որը կատարվում է նոր արժեք վերագրելուց առաջ և հետո, ապա օգտագործեք `willSet`-ը և `didSet`-ը։ Ձեր գրած կոդը աշխատում է ամեն անգամ, երբ հատկության արժեքը փոխվում է արժեքավորիչից դուրս։ Օրինակ, ստորև բերված դասը երաշխավորում է, որ իր եռանկյան կողի երկարությունը միշտ նույնն է, ինչ որ իր քառակուսու կողինը։
+
+```Swift
+class TriangleAndSquare {
+    var triangle: EquilateralTriangle {
+        willSet {
+            square.sideLength = newValue.sideLength
+        }
+    }
+    var square: Square {
+        willSet {
+            triangle.sideLength = newValue.sideLength
+        }
+    }
+    init(size: Double, name: String) {
+        square = Square(sideLength: size, name: name)
+        triangle = EquilateralTriangle(sideLength: size, name: name)
+    }
+}
+var triangleAndSquare = TriangleAndSquare(size: 10, name: "another test shape")
+print(triangleAndSquare.square.sideLength)
+// Prints "10.0"
+print(triangleAndSquare.triangle.sideLength)
+// Prints "10.0"
+triangleAndSquare.square = Square(sideLength: 50, name: "larger square")
+print(triangleAndSquare.triangle.sideLength)
+// Prints "50.0"
+```
+
+Optoinal արժեքների հետ աշխատելիս գործողություններից առաջ, ինչպիսք են մեթոդները, հատկություններ և ինդեքսավորումը, կարող եք գրել `?` նիշը։ Եթե `?` նշանից առաջ գրած արժեքը `nil` է, ապա `?`-ին հաջորդող ամեն ինջ անտեսվում է և ամբողջ արտահայտության արժեքը համարվում է `nil`։ Հակառակ դեպքում optional արժեքը բացվում է և `?`-ին հետևող ամեն ինչ ծառայում է որպես բացված արժեք. Երկու դեպքում էլ ամբողջ արտահայտության արժեքը optional արժեք է։
+
+```Swift
+let optionalSquare: Square? = Square(sideLength: 2.5, name: "optional square")
+let sideLength = optionalSquare?.sideLength
+```
+
+
+## Թվարկումներ և ստրուկտուրաներ
+
+Թվարկում ստեղծելու համար օգտագործեք `enum`-ը։ Ինչպես և այլ անվանված տիպերը, թվարկումներն էլ կարող են իրենց հետ համապատասխանեցված մեթոդներ ունենալ։
+
+```Swift
+enum Rank: Int {
+    case ace = 1
+    case two, three, four, five, six, seven, eight, nine, ten
+    case jack, queen, king
+
+    func simpleDescription() -> String {
+        switch self {
+        case .ace:
+            return "ace"
+        case .jack:
+            return "jack"
+        case .queen:
+            return "queen"
+        case .king:
+            return "king"
+        default:
+            return String(self.rawValue)
+        }
+    }
+}
+let ace = Rank.ace
+let aceRawValue = ace.rawValue
+```
+
+> __Վարժություն։__ Գրեք ֆունկցիա, որը երկու `Rank` արժեքներ համեմատում է՝ դրանց raw ? արժեքները համեմատելով։
+
