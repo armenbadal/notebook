@@ -528,3 +528,281 @@ let aceRawValue = ace.rawValue
 
 > __Վարժություն։__ Գրեք ֆունկցիա, որը երկու `Rank` արժեքներ համեմատում է՝ դրանց raw ? արժեքները համեմատելով։
 
+Լռելությամբ Swift-ը raw ? արժեքները սկում է զրոյից և ամեն անգամ ավելացնում է մեկով, սակայն այս վարքը կարող եք փոխել՝ բացահայտ արժեքներ նշելով։ Վերը բերված օրինակում `ace`-ին բացահայտ տրված է `1` արժեքը, իսկ մյուս անդամներին տրված են հաջորդական արժեքներ։ Որպես թվարկման raw ? տիպ կարող եք օգտագործել նաև տողը (string) կամ սահող կետով թվերը։ Թվարկման անդամի հետ կապված արժեքը ստանալու համար օգտագործեք `rawValue` հատկությունը։ 
+
+Պարզ արժեքից թվարկման նմուշ ստանալու համար օգտագործեք `init?(rawValue:)` արժեքավորիչը։ Այն կամ վերադարձնում  տրված արժեքին համապատասխանող թվարկման անդամը, կամ էլ `nil`, եթե համապատասխանող չկա։
+
+```Swift
+if let convertedRank = Rank(rawValue: 3) {
+    let threeDescription = convertedRank.simpleDescription()
+}
+```
+
+Թվարկման անդամերն իրական արժեքներ են, այլ ոչ թե պարզ արժեքների մի այլ գրառման եղանակ։ In fact, in cases where there isn’t a meaningful raw value, you don’t have to provide one.
+
+```Swift
+enum Suit {
+    case spades, hearts, diamonds, clubs
+
+    func simpleDescription() -> String {
+        switch self {
+        case .spades:
+            return "spades"
+        case .hearts:
+            return "hearts"
+        case .diamonds:
+            return "diamonds"
+        case .clubs:
+            return "clubs"
+        }
+    }
+}
+let hearts = Suit.hearts
+let heartsDescription = hearts.simpleDescription()
+```
+
+> __Վարժություն։__ `Suit`-ին ավելացրեք `color()` մեթոդը, որը `spaces`-ի և `clubs`-ի համար վերադարձնում է `black`, իսկ `hearts`-ի և `diamonds`-ի համար՝ `red`:
+
+Ուշադրություն դարձրեք վերը բերված ծրագրում `hearts` անվան երկու տարբեր գրառումներին. երբ արժեք է վերագրվում `hearts` հաստատունին, թվարկման անդամը հիշատակվում է իր լրիվ անունով՝ `Suit.hearts`, քանի որ հաստատունի տիպը բացահայտ նշված չէ։ `switch` կառուցվածքում թվարկման անդամը հիշատակվում է `.hearts` համառոտ գրառմամբ, որովհետև `self`-ի տիպը հայտնի է։ Համառոտ գրառումը կարող եք օգտագործել բոլոր այն տեղերում, որտեղ դիտարկվող արժեքի տիպն արդեն հայտնի է։
+
+If an enumeration has raw values, those values are determined as part of the declaration, which means every instance of a particular enumeration case always has the same raw value. Another choice for enumeration cases is to have values associated with the case—these values are determined when you make the instance, and they can be different for each instance of an enumeration case. You can think of the associated values as behaving like stored properties of the enumeration case instance. For example, consider the case of requesting the sunrise and sunset times from a server. The server either responds with the requested information, or it responds with a description of what went wrong.
+
+```Swift
+enum ServerResponse {
+    case result(String, String)
+    case failure(String)
+}
+
+let success = ServerResponse.result("6:00 am", "8:09 pm")
+let failure = ServerResponse.failure("Out of cheese.")
+
+switch success {
+case let .result(sunrise, sunset):
+    print("Sunrise is at \(sunrise) and sunset is at \(sunset).")
+case let .failure(message):
+    print("Failure...  \(message)")
+}
+// Prints "Sunrise is at 6:00 am and sunset is at 8:09 pm."
+```
+
+> __Վարժություն։__ `ServerResponse`-ի համար ավելացրեք երրորդ դեպքը և լրացրեք `switch`-ում։
+
+Ուշադրություն դարձրեք, թե ինչպես են `sunrise` և `sunset` արժեքները ստացվում `ServerResponse` արժեքից՝ որպես `switch`-ի ճյուղին համապատասխանեցման արժեք։
+
+Ստրուկտուրա սահմանելու համար օգտագործեք `struct` բառը։ Ստրուկտուրաները վարքով շատ նման են դասերին՝ ներառյալ մեթոդներն ու արժեքավորիչները։ Ստրուկտուրաների ու դասերի կարևոր տարբերություններից մեկն այն է, որ կոդում այս կամ այն տեղը փոխանցելիս ստրուկտուրաների նմուշները միշտ պատճենվում են, իսկ դասերի նմուշները փոխանցվում են հղումով։
+
+```Swift
+struct Card {
+    var rank: Rank
+    var suit: Suit
+    func simpleDescription() -> String {
+        return "The \(rank.simpleDescription()) of \(suit.simpleDescription())"
+    }
+}
+let threeOfSpades = Card(rank: .three, suit: .spades)
+let threeOfSpadesDescription = threeOfSpades.simpleDescription()
+```
+
+> __Վարժություն։__ Գրեք ֆունկցիա, որը վերադարձնում է քարտերի լրիվ կապոցը, որտեղ ամե մի քարտը `Rank`-ի ու `Suit`-ի համադրություն է։
+
+
+## Համաձայնագրեր և ընդլայնումներ
+
+Համաձայնագիր (protocol) սահմանելու ամար օգտագործեք `protocol` բառը։
+
+```Swift
+protocol ExampleProtocol {
+    var simpleDescription: String { get }
+    mutating func adjust()
+}
+```
+
+Դասերը, թվարկումները և ստրուկտուրաները կարող են ներառել (adopt), ընդունել համաձայնագրերը։ 
+
+```Swift
+class SimpleClass: ExampleProtocol {
+    var simpleDescription: String = "A very simple class."
+    var anotherProperty: Int = 69105
+    func adjust() {
+        simpleDescription += "  Now 100% adjusted."
+    }
+}
+var a = SimpleClass()
+a.adjust()
+let aDescription = a.simpleDescription
+
+struct SimpleStructure: ExampleProtocol {
+    var simpleDescription: String = "A simple structure"
+    mutating func adjust() {
+        simpleDescription += " (adjusted)"
+    }
+}
+var b = SimpleStructure()
+b.adjust()
+let bDescription = b.simpleDescription
+```
+
+> __Վարժություն։__ Եվս մի պահանջ ավելացրեք `ExampleProtocol`-ում։ Ի՞նչ փոփոխություններ պետք է անեք `SimpleClass`-ում և `SimpleStructure`-ում, որպեսզի դրանք շարունակեն ընդունել համաձայնագիրը։
+
+Ուշադրություն դարձրեք `SimpleStructure`-ի սահմանման մեջ օգտագործված `mutating` ծառայողական բառին, որով նշվում է այն մեթոդը, որը փոփոխություններ է կատարում ստրուկտուրայում։ `SimpleClass`-ի սահմանման մեջ կարիք չկա որևէ մեթոդ նշել որպես `mutating`, քանի որ դասի մեթոդները միշտ կարող են փոփոխել դասի նմուշի արժեքները։
+
+Գոյություն ունեցող տիպին նոր ֆունկցիոնալություն, ինչպիսիք են նոր մեթոդը կամ հաշվարկված հատկությունը, ավելացնելու համար օգտագործեք `extension`-ը։ Ընդլայնման հնարավորությունը կարող եք օգագործել մի այլ տեղում սահմանված կամ նույնիսկ գրադարանից ներմուծված տիպին համաձայնագիր կապելու համար։
+
+```Swift
+extension Int: ExampleProtocol {
+    var simpleDescription: String {
+        return "The number \(self)"
+    }
+    mutating func adjust() {
+        self += 42
+    }
+}
+print(7.simpleDescription)
+// Prints "The number 7"
+```
+
+> __Վարժություն։__ `Double` տիպի համար գրեք `absoluteValue` հատկությունն ավելացնող ընդլայնում։
+
+Համաձայնագրի անունը կարող եք օգտագործել ինչպես որևէ այլ տիպի անուն, օրինակ, որպեսզի ստեղծենք հավաքածու այնպիսի օբյեկտների համար, որոնց տիպերը տարբեր են, բայց բոլորն էլ ընդունում են նույն համաձայնագիրը։ Երբ աշխատում եք այնպիսի արժեքների հետ, որոնք տիպը համաձայնագրի տիպ է, ապա համաձայնագրից դուրս սահմանված մեթոդները հասանելի չեն։
+
+```Swift
+let protocolValue: ExampleProtocol = a
+print(protocolValue.simpleDescription)
+// Prints "A very simple class.  Now 100% adjusted."
+// print(protocolValue.anotherProperty)  // Uncomment to see the error
+```
+
+Չնայած որ `protocolValue` փոփոխականը կատարման ժամանակ ունի `SimpleClass` տիպը, կոմպիլյատորն այն դիտարկում է հայտարաված `ExampleProtocol` տիպով։ Սա նշանակում է, որ չեք կարող պատահաբար հասանելիություն ստանալ այն մեթոդներին ու հատկություններին, որոնք դասը իրականացնում է ի լրումն իր համաձայնագրելի համապատասխանության։
+
+
+## Սխալների մշակում
+
+սխաները կարող եք ներկայացնել որևէ տիպով, որը ընդունում է `Error` համաձայնագիրը։
+
+```Swift
+enum PrinterError: Error {
+    case outOfPaper
+    case noToner
+    case onFire
+}
+```
+
+Սխալ գեներացնելու համար օգտագործեք `throw` բառը, իսկ `throws` բառը՝ սխալ գեներացնող ֆունկցիան նշելու համար։ Եթե ֆունկցիայի մեջ սխալ եք գեներացնում, ապա ֆունցկաին անմիջապես ավարտվում է, և այդ ֆունկցիան կանկչող կոդը մշակում է սխալը։
+
+```Swift
+func send(job: Int, toPrinter printerName: String) throws -> String {
+    if printerName == "Never Has Toner" {
+        throw PrinterError.noToner
+    }
+    return "Job sent"
+}
+```
+
+Սխալների մշակման մի քանի եղանակներ կան։ Մի եղանակը `do`-`catch` կառուցվածքն է։ `do` բլոկում նշում եք այն կոդը, որը կարող է սխալ գեներացնել՝ դրա դիմաց գրելով `try` բառը։ `catch` բլոկում սխալին ավտոմատ տրվում է `error` անունը, եթե այլ անուն չեք նշել։
+
+```Swift
+do {
+    let printerResponse = try send(job: 1040, toPrinter: "Bi Sheng")
+    print(printerResponse)
+} catch {
+    print(error)
+}
+// Prints "Job sent"
+```
+
+> __Վարժություն։__ Տպիչի անունը դարձրեք «Never Has Toner», որպեսզի `send(job:toPrinter:)` ֆունկցիայի կանչը սխալ գեներացնի։
+
+Տարբեր տիպի սխալներ մշակելու համար կարող եք մի քանի `catch` բլոկներ գրել։ `catch`-ից հետո կարող եք ձևանմուշ գրել. ճիշտ այնպես, ինչպես `switch`-ի `case`-ից հետո։
+
+```Swift
+do {
+    let printerResponse = try send(job: 1440, toPrinter: "Gutenberg")
+    print(printerResponse)
+} catch PrinterError.onFire {
+    print("I'll just put this over here, with the rest of the fire.")
+} catch let printerError as PrinterError {
+    print("Printer error: \(printerError).")
+} catch {
+    print(error)
+}
+// Prints "Job sent"
+```
+
+> __Վարժություն։__ Ավելացրեք կոդ, որը սխալ կգեներացնի `do` բլոկում։ Ի՞նչ տիպի սխալ պետք է գեներացնեք, որ այն մշակվի առաջին `catch` բլոկում։ Իսկ ինչպիսի՞ն՝ երկրորդ և երրորդ `catch` բլոկներում մշակվելու համար։
+
+Սխալները մշակելու մի այլ եղանակ է `try?`-ի օգնությամբ արժեք optional-ի ձևափոխելը։ Եթե ֆունկցիան սխալ է գեներացնում, ապա սխալի օբյեկտը դեն է նետվում և արդյունքը համարվում է `nil`։ Հակառակ դեպքում արդյունքը optional է, որը պարունակում է ֆունկցիայի վերադարձրած արժեքը։ 
+
+```Swift
+let printerSuccess = try? send(job: 1884, toPrinter: "Mergenthaler")
+let printerFailure = try? send(job: 1885, toPrinter: "Never Has Toner")
+```
+
+Ֆունկցիայի ամբողջ կոդը կատարվելուց հետո և հենց ֆունկցիայի ավարտից առաջ կատարվող կոդ գրելու համար օգտագործեք `defer`-ը։ Այդ կոդը կատարվում է նույնիսկ եթե ֆունկցիայում սխալ է գեներացվել։ `defer`-ը կարող եք օգտագործել կարգավորումների (setup) ու մաքրման (cleanup) կոդերն իրար մոտ գրելու համար, թեկուզ և դրանք կատարվում են տարբեր ժամանակ։
+
+```Swift
+var fridgeIsOpen = false
+let fridgeContent = ["milk", "eggs", "leftovers"]
+
+func fridgeContains(_ food: String) -> Bool {
+    fridgeIsOpen = true
+    defer {
+        fridgeIsOpen = false
+    }
+
+    let result = fridgeContent.contains(food)
+    return result
+}
+fridgeContains("banana")
+print(fridgeIsOpen)
+// Prints "false"
+```
+
+
+## Generic-ներ
+
+Ընդհանրացված (generic) ֆունկցիա կամ տիպ սահմանելու համար դրա անունից հետո, անկյունավոր փակագծերում գրեք պարամետրի անունը։
+
+```Swift
+func makeArray<Item>(repeating item: Item, numberOfTimes: Int) -> [Item] {
+    var result = [Item]()
+    for _ in 0..<numberOfTimes {
+        result.append(item)
+    }
+    return result
+}
+makeArray(repeating: "knock", numberOfTimes: 4)
+```
+
+Կարող եք սահմանել ֆունկցիաների ու մեթոդների, ինչպես նաև դասերի, թվարկումների ու ստրուկտուրաների ընդհանրացված ձևերը։
+
+```Swift
+// Reimplement the Swift standard library's optional type
+enum OptionalValue<Wrapped> {
+    case none
+    case some(Wrapped)
+}
+var possibleInteger: OptionalValue<Int> = .none
+possibleInteger = .some(100)
+```
+
+`where` բառով սահմանեք նախապայմաններ՝ գրելով մարմնից անմիջապես առաջ, օրինակ, պահանջելու համար, որ տիպը ընդունի համաջայնագիրը, կամ պահանջելու համար, որ երկու տիպեր նույնը լինեն, կամ էլ պահանջելու համար, որ դասը ժառանգված լինի որևէ կոնկրետ դասից։
+
+```Swift
+func anyCommonElements<T: Sequence, U: Sequence>(_ lhs: T, _ rhs: U) -> Bool
+    where T.Element: Equatable, T.Element == U.Element
+{
+    for lhsItem in lhs {
+        for rhsItem in rhs {
+            if lhsItem == rhsItem {
+                return true
+            }
+        }
+    }
+    return false
+}
+anyCommonElements([1, 2, 3], [3])
+```
+
+> __Վարժություն։__ Ձևափոխեք `anyCommonElements(_:_:)` ֆունկցիան այնպես, որ վերադարձնի այն տարրերի ցուցակը, որոնք երկու հաջրդականություններում էլ առկա են։
+
+`<T: Equatable>` գրառումը համարժեք է `<T> ... where T: Equatable` գրառմանը։
