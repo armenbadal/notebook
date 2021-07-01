@@ -2,7 +2,7 @@
 
 Տարբեր թեմաներով տարբեր գրառումներ։
 
-## Խառը գրառումներ 
+## Խառը գրառումներ
 
 1. [Խառը գրառումներ PowerShell-ի հրամանների մասին](my/powershell.md)
 2. [Խառը գրառումներ Swift-ի մասին](my/swift.md)
@@ -18,3 +18,10 @@
 ### Swift
 
 1. [Swift լեզվի ներածություն](translated/swift/a-swift-tour.md)
+2. [Ֆունկցիաներ](translated/swift/functions.md)
+
+
+### Հոդվածներ
+
+1. [Խոնարհ ծրագրավորողը](translated/classics/humble-programmer-the.md), _Էդսգեր Դիյքսթրա_
+2. [Դարձեք ծրագրավորող տասը տարում](translated/classics/teach-yourself-programming.md), _Փիթեր Նորվիգ_
