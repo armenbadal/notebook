@@ -24,4 +24,4 @@
 ### Հոդվածներ
 
 1. [Խոնարհ ծրագրավորողը](translated/classics/humble-programmer-the.md), _Էդսգեր Դիյքսթրա_
-2. [Դարձեք ծրագրավորող տասը տարում](translated/classics/teach-yourself-programming.md), _Փիթեր Նորվիգ_
+2. [Սովորեք ծրագրավորում տասը տարում](translated/classics/teach-yourself-programming.md), _Փիթեր Նորվիգ_
