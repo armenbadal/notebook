@@ -1,5 +1,56 @@
 # Խառը գրառումներ PowerShell-ի հրամանների մասին
 
+## Երկու JSON-ների միավորումը
+
+Ինձ պետք էր կարդալ ծրագրի կարգավորումների երկու JSON ֆայլերը: Դրանցից առաջինը պարունակում է հիմնական կարգավորումները, իսկ երկրորդը՝ օգտագործողի կարգավորումները։ Ես ուզում եմ կարդալ դրանք, միավորել, ապա նոր կարգավորումները կիրառել ծրագրում։ Օրինակ, թող որ հիմնական ֆայլում գրված է.
+
+```json
+{
+    "mode": "production",
+    "url": "https://github.com/armenbadal",
+
+    "windows": {
+        "place": "C:\\Program Files\\Analyzer"
+    },
+
+    "macos": {
+        "place": "/Applications/Analyzer"
+    }
+}
+```
+
+Իսկ օգտագործողի ֆայլում գրված է.
+
+```json
+{
+    "mode": "development",
+    "local-data": "$ProjectDir\data"
+}
+```
+
+Եվ այս երկու ֆայլերը կարդալուց ու միավորելուց հետո ուզում եմ ստանալ հետևյալ JSON օբյեկտները։ Windows-ի համար.
+
+```json
+{
+    "mode": "development",
+    "url": "https://github.com/armenbadal",
+    "local-data": "$ProjectDir\data",
+    "place": "C:\\Program Files\\Analyzer"
+}
+```
+
+Իսկ macOS-ի համար.
+
+```json
+{
+    "mode": "development",
+    "url": "https://github.com/armenbadal",
+    "local-data": "$ProjectDir\data",
+    "place": "/Applications/Analyzer"
+}
+```
+
+
 ## Հրամանների պատմությունը
 
 Հատկապես Լինուքս/Յունիքս աշխարհից եկած մարդկանց համար շատ կարևոր է `history` հրամանը, որը հնարավորություն է տալիս թվարկել ու նորից աշխատեցնել _shell_-ի հրամանները։ Այդ նույն նպատակի համար PowerShell-ը առաջարկում է `Get-History` հրամանը։ Սակայն վերջինս «հիշում» է միայն տվյալ սեսիայի (session) հրամանները։
