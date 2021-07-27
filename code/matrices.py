@@ -1,21 +1,30 @@
 
 from functools import reduce
 
-
-def isEmpty(mx):
-    return reduce(lambda x, y: x and y, list(map(lambda r: len(r) == 0, mx)))
-
-
-def inverse(m):
-    def inverseRec(mx, r):
-        if isEmpty(mx):
-            retunr r
-
-        r.append(list(map(lambda e: e[0], mx)))
-        return inverseRec(list(map(lambda e: e[1:], mx)))
-
-    return inverseRec(m, [])
-
+def transpose2(mx):
+    columnsCount = len(mx[0])
+    columnAsVector = lambda n: list(map(lambda e: e[n], mx))
+    return list(map(columnAsVector, range(columnsCount)))
 
 def scalarProduct(vo, vi):
     return reduce(lambda a, b: a + b, list(map(lambda x, y: x * y, vo, vi)), 0)
+
+def multiplyMatrices(mo, mi):
+    pass
+
+
+
+
+# examples
+m0 = [[1], [2], [3], [4]]
+m1 = [[1, 2, 3, 4]]
+
+
+
+if __name__ == '__main__':
+    t0 = transpose2(m0)
+    print(t0)
+
+    t1 = transpose2(m1)
+    print(t1)
+
