@@ -23,5 +23,6 @@
 
 ### Հոդվածներ
 
-1. [Խոնարհ ծրագրավորողը](translated/classics/humble-programmer-the.md), _Էդսգեր Դիյքսթրա_
-2. [Սովորեք ծրագրավորում տասը տարում](translated/classics/teach-yourself-programming.md), _Փիթեր Նորվիգ_
+* [Ընդդեմ GO TO հրամանի](translated\classics\a-case-against-goto.md), _Էդսգեր Դիյքսթրա_:
+* [Խոնարհ ծրագրավորողը](translated/classics/humble-programmer-the.md), _Էդսգեր Դիյքսթրա_:
+* [Սովորեք ծրագրավորում տասը տարում](translated/classics/teach-yourself-programming.md), _Փիթեր Նորվիգ_:
