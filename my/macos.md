@@ -1,0 +1,1 @@
+# macOS-ի daemon-ները
