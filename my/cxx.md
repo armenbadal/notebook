@@ -151,7 +151,7 @@ void VariableForMillisecondsCheck::check(const MatchFinder::MatchResult &Result)
 
 ```C++
 void VariableForMillisecondsCheck::registerMatchers(MatchFinder *Finder) {
-  Finder->addMatcher(fieldDecl(unless(hasType(asString("int")))).bind("ms"), this);
+  Finder->addMatcher(fieldDecl(unless(hasType(asString("int")))).bind("mv"), this);
 }
 ```
 
@@ -162,15 +162,15 @@ void VariableForMillisecondsCheck::registerMatchers(MatchFinder *Finder) {
 ```C++
 void VariableForMillisecondsCheck::check(const MatchFinder::MatchResult &Result) {
   const auto *MatchedDecl = Result.Nodes.getNodeAs<FieldDecl>("mv");
-  if (!MatchedDecl->getIdentifier() || !MatchedDecl->getName().endswith("Ms"))
-    return;
-
-  diag(MatchedDecl->getLocation(), "member %0 is defined for milliseconds but it's size is not an int")
-      << MatchedDecl;
+  if (MatchedDecl->getIdentifier() && MatchedDecl->getName().endswith("Ms"))
+    diag(MatchedDecl->getLocation(), "member %0 is defined for milliseconds but it's size is not an int")
+        << MatchedDecl;
 }
 ```
 
 clang-tidy-ն թույլ է տալիս նաև փոփոխություններ կատարել վերլուծության ծառում։ Տվյալ դեպքի համար, օրինակ, կարելի էր իրականացնել կտոր, որը մեզ հետաքրքրող հայտարարության տիպը դարձնում է `int`։ Բայց, ինչպես ասում էր դասականը, այդ մասին՝ հաջորդ դասին։
+
+#### Build
 
 LLVM-ի ծրագրերի կառուցման համակարգը գրված է CMake-ով։ Գեներացնում ենք մեզ անհրաժեշտ կոնֆիգուրացիան.
 
@@ -188,3 +188,40 @@ $ cmake --build build --target clang-tidy --config Release --parallel 4
 ```
 
 Կախված կոմպյուտերի պրոցեսորի տեսակից `--parallel` պարամետրի արգումենտը կարելի է փոխել ու ստանալ կոմպիլյացիայի ու կապակցման ավելի կարճ ժամանակ։ Այնուամենայնիվ՝ սա երկար պրոցես է ու կարող է ժամեր տևել։
+
+#### Օրինակ
+
+Արվածը ստուգելու և ցուցադրելու համար պատրաստել եմ հետևյալ օրինակը.
+
+```C++
+struct String {
+    unsigned int length;
+    char* data;
+};
+
+struct Configuration {
+    short int durationMs;  // 1
+    long int intervalMs;   // 2
+    int fromNowMs;         // 3
+    short int count;       // 4
+    String namesMs;        // 5
+};
+```
+
+Ակնկալում եմ, որ այս օրինակի համար աշխատեցնելիս clang-tidy-ն բողոքելու է առաջին, երկրորդ և հինգերորդ փոփոխականների հայտարարությունների համար։ Փորձեմ.
+
+```bash
+$ clang-tidy --checks='-*,misc-variable-for-milliseconds' ex0.cxx --
+3 warnings generated.
+/Users/armenbadalian/Projects/a0/ex0.cxx:8:15: warning: member 'durationMs' is defined for milliseconds but it's size is not an int [misc-variable-for-milliseconds]
+    short int durationMs;
+              ^
+/Users/armenbadalian/Projects/a0/ex0.cxx:9:14: warning: member 'intervalMs' is defined for milliseconds but it's size is not an int [misc-variable-for-milliseconds]
+    long int intervalMs;
+             ^
+/Users/armenbadalian/Projects/a0/ex0.cxx:12:12: warning: member 'namesMs' is defined for milliseconds but it's size is not an int [misc-variable-for-milliseconds]
+    String namesMs;
+           ^
+```
+
+Կարծես թե վատ չէ։
