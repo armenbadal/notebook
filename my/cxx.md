@@ -70,7 +70,7 @@ void assign(R& place, const string& key, const json& data)
 
 Սա մեզ հնարավորություն կտա կոնֆիգուրացիայի JSON ֆայլից տվյալները կարդալիս որսալ վերը նկարագրված սխալները։ Օրինակ, եթե մեր կոնֆիգուրացիան այսպիսինն է.
 
-```json
+```C++
 const auto example2 = R"(
 {
     "interval-ms": 300000,
