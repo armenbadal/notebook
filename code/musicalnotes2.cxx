@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 int main()
 {
@@ -6,31 +7,42 @@ int main()
   char note;
   std::cin >> note;
 
+  std::string name;
   switch( note ) {
     case 'C':
-      std::cout << "դո" << endl;
+    case 'c':
+      name = "դո";
       break;
     case 'D':
-      std::cout << "ռե" << endl;
+    case 'd':
+      name = "ռե";
       break;
     case 'E':
-      std::cout << "մի" << endl;
+    case 'e':
+      name = "մի";
       break;
     case 'F':
-      std::cout << "ֆա" << endl;
+    case 'f':
+      name = "ֆա";
       break;
     case 'G':
-      std::cout << "սոլ" << endl;
+    case 'g':
+      name = "սոլ";
       break;
     case 'A':
-      std::cout << "լա" << endl;
+    case 'a':
+      name = "լա";
       break;
     case 'B':
-      std::cout << "սի" << endl;
+    case 'b':
+      name = "սի";
       break;
     default:
       std::cerr << "Այդպիսի նոտա չկա։" << std::endl;
   }
+
+  if( !name.empty() )
+    std::cout << name << std::endl;
 
   return 0;
 }
