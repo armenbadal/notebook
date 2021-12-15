@@ -23,6 +23,11 @@
 
 ### Հոդվածներ
 
-* [Ընդդեմ GO TO հրամանի](translated\classics\a-case-against-goto.md), _Էդսգեր Դիյքսթրա_:
+* [Ընդդեմ GO TO հրամանի](translated/classics/a-case-against-goto.md), _Էդսգեր Դիյքսթրա_:
 * [Խոնարհ ծրագրավորողը](translated/classics/humble-programmer-the.md), _Էդսգեր Դիյքսթրա_:
 * [Սովորեք ծրագրավորում տասը տարում](translated/classics/teach-yourself-programming.md), _Փիթեր Նորվիգ_:
+
+
+### C++
+
+* [Լամբդաների զարգացումը C++14-ում, C++17-ում և C++20-ում](translated/cxx/fluent-cxx-lambdas.md)
