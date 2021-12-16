@@ -59,7 +59,7 @@ auto myLambda = [](auto&& x){ std::cout << x << '\n'; };
 
 ```C++
 auto myLambda = [](namespace1::namespace2::namespace3::ACertainTypeOfWidget const& widget) { std::cout << widget.value() << '\n'; };
-՝՝՝
+```
 
 վերածվում է սրան.
 
