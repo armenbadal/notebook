@@ -7,8 +7,15 @@
 1. [Խառը գրառումներ PowerShell-ի հրամանների մասին](my/powershell.md)
 2. [Խառը գրառումներ Swift-ի մասին](my/swift.md)
 3. [Խառը գրառումներ Python-ի մասին](my/python.md)
+4. [Խառը գրառումներ Go-ի մասին](my/golang.md)
+5. [Խառը գրառումներ C++-ի մասին](my/cxx.md)
+
 
 ## Թարգմանություններ
+
+### Go
+
+1. [Ինչպես օգտագործել `//go:generate`-ը](translated/go/how-to-use-go-generate.md)
 
 ### Boost
 
