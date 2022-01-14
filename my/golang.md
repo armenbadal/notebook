@@ -26,15 +26,49 @@ $ rm go1.17.6.linux-amd64.tar.gz
 $ echo 'PATH="$HOME/golang/go/bin:$PATH"' >> ~/.profile
 ```
 
+Որպեսզի `PATH`-ի փոփոխությունն արտացոլվի միջավայրում, կատարում եմ հետևյալ հրամանը.
+
+```bash
+$ source ~/.profile
+```
+
+Համոզվում եմ, որ `go` գործիքը հասանելի է.
+
+```bash
+$ go version
+go version go1.17.6 linux/amd64
+```
+
 Հետո նույն `golang`-ի մեջ ստեղծում եմ `gopath` պանակն ու `GOPATH` փոփոխականին վերագրում եմ դրա արժեքը։ Այս պանակն օգտագործվում է լրացուցիչ գործիքներ ու գրադարաններ տեղադրելու համար։
 
 ```bash
 $ mkdir gopath
-$ echo 'export GOPATH="$HOME/golang/gopath"' >> ~/.profile
+$ go env -w GOPATH=$HOME/golang/gopath
 ```
 
-Որպեսզի `PATH`-ի ու `GOPATH`-ի փոփոխություններն արտացոլվեն միջավայրում, կատարում եմ հետևյալ հրամանը.
+Եթե `go env` հրամանին որևէ այլ արգումենտ տրված չէ, ապա արտածվում են Go-ի կողմից օգտագործվելիք բոլոր համակարգային փոփոխականներն ու դրանց արժեքները։
+
+
+## Փորձարկում
+
+Պարզ է, որ Go-ի գործիքների փորձարկումը պիտի լինի աշխարհին ողջունելով։ Ես սովորաբար ծրագրերը գրում եմ `$HOME/Projects` պանակում։ Տեղափոխվեմ այդտեղ ու ստեղծեմ `go-hello` պանակը։
 
 ```bash
-$ source ~/.profile
+$ cd ~/Projects
+$ mkdir go-hello
+$ cd go-hello
+```
+
+Այստեղ ստեղծում եմ `hello.go` ֆայլը և դրա մեջ գրում եմ https://go.dev/ էջի առաջին օրինակը.
+
+```Go
+// You can edit this code!
+// Click here and start typing.
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, 世界")
+}
 ```
