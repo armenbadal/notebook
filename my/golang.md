@@ -72,3 +72,18 @@ func main() {
 	fmt.Println("Hello, 世界")
 }
 ```
+
+Փորձեմ կատարել այս ֆայլը․
+
+```bash
+$ go run ./hello.go
+Hello, 世界
+```
+
+Լավ է։ Հիմա նույն ֆայլը թարգմանեմ կատարվող մոդուլի․
+
+```bash
+$ go build ./hello.go
+$ ls
+hello hello.go
+```
