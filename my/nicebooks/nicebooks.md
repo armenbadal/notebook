@@ -277,3 +277,127 @@ __Հեղինակային իրավունքների__ տեխնիկական էջը 
 Տիտղոսաթերթն ու հեղինակային իրավունքի էջն ունեն մոտավորապես հետևյալ տեսքը.
 
 ![տիտղոսաթերթ եւ հեղինակային իրավունքի էջ](titlepage.png)
+
+__Բովանդակության ցանկը__ LaTeX-ը ավտոմատ կառուցում է, պարզապես պետք է ձեռագրի համապտասխան տեղում գրել `\tableofcontents` հրամանը։ Կարելի է համապատասխան փաթեթների ընտրությամբ կարգավորել բովանդակության ցանկի ոճը, բայց ես որոշեցի թողնել հենց ամենապարզ տարբերակը։
+
+__Գրականության կան աղբյուրների ցանկ__ կառուցելու համար նույնպես TeX/LaTeX իրականացումները տրամադրում են համապատասխան հրամաններ, գործիքներ ու փաթեթներ։ Նախ պետք է գրքի տեքստից հղվելիք բոլոր գրական միավորները (գրքեր, ամսագրեր, հոդվածներ, կայքեր և այլն) նկարագրել [BibTeX](http://www.bibtex.org/) ֆորմատով, առանձին ֆայլում։ Օրինակ, Քերնիգանի և Րիչիի The C Programming Language գրքի երկրորդ հրատարակության BibTeX նկարագրությունն այսպիսինն է.
+
+```BibTeX
+@book{krc,
+  author    = {Brian W. Kernighan and Dennis Ritchie},
+  title     = {The {C} Programming Language, Second Edition},
+  publisher = {Prentice-Hall},
+  year      = {1988}
+}
+```
+
+Ձեռագրի տեքստում այս գրքին հղվելու համար պետք է օգտագործել `\cite` հրամանը։ Իսկ այն տեղում, որտեղ պետք է արտածվի գրականության ցանկը, սովորաբար դա գրքի վերջին մասն է, պետք է գրել հետևյալ հրամանները.
+
+```LaTeX
+\bibliographystyle{plain} % ընտրվում է ցանկի ոճը
+\bibliography{vcl-book}   % արտածում է բուն ցանկը
+```
+
+Իսկ գիրքը կառուցելիս, որպեսզի `\cite` հրամանի արդյունքները արտացոլվեն վերջնական տեքստում, պետք է կատարել հետևյալ երեք հրամանները.
+
+```bash
+$ xelatex vcl-book.tex
+$ bibtex vcl-book.aux
+$ xelatex vcl-book.tex
+```
+
+Քանի որ առիթն եկավ, մի երկու բառ LaTeX-ի աշխատանքի ավտոմատացման մասին։ Ձեռագրից գրքի վերջնական պատկերը ստանալու պրոցեսում, բացի XeLaTeX-ի թարգմանիչից, անհրաժեշտություն է առաջանում գործարկել նաև որոշ այլ օժանդակ գործիքներ։ Օրինակ, վերը նշված `bibtex`-ը՝ գրականության ցանկի համար, `makeindex`-ը՝ առարկայական ցանկի համար, `metapost`-ը՝ գծապատկերների համար և այլն։ Այս գործիքները ճիշտ հաջորդականությամբ աշխատեցնելու համար կարելի է, իհարկե, գրել պարզ Makefile, Bash-ի կամ BAT սկրիպտ։ Բայց ավելի հարմար է օգտագործել խնդիրների ավտոմատացման գործիքներից մեկը, օրինակ, [arara](https://gitlab.com/islandoftex/arara)-ն։ Սրա առավելությունն այն է, որ իր աշխատանքային հրահանգները կարդում է ձեռագրի ֆայլում գրված մեկնաբանություններից։ Օրինակ, ես `vcl-book.tex` ֆայլի ամենասկզբում, `\documntclass`-ից էլ առաջ, գրել եմ.
+
+```LaTeX
+% arara: xelatex
+% arara: bibtex
+% arara: xelatex
+%
+```
+
+Իսկ հրամանային տողից աշխատեցնում եմ.
+
+```Bash
+$ arara vcl-book.tex
+```
+
+__Առարկայական ցանկ__ կառուցելու համար նախ պետք է կցել `makeidx` փաթեթը, իսկ ձեռագրի տեքստում `\index` հրամանով նշել այն տարրերը, որոնք պետք է հայտնվեն ցանկում։ Լռելությամբ `\index` հրամանը ոչինչ չի անում, պարզապես անտեսում է իր արգումենտը։ Դրա վարքն ակտիվացնելու համար պետք է `\begin{document}` հրամանից առաջ, գրել `\makeindex` հրամանը։ Այս դեպքում `\index` հրամանի արգումենտը, համապատասխան էջի համարի հետ միասին, գրանցվում է `*.idx` ֆայլում։ Այս ֆայլը մշակվում է makeindex գործիքով, որը ֆորմատավորում և այբբենական կարգով դասավորում է առարկայական ցանկի անդամները։ Եվ վերջապես, գրքի այն մասում, որտեղ որ պետք է արտածվի առարկայական ցանկը, գրում եմ `\printindex` հրամանը։
+
+__Ամփոփում 1:__ Գրառումներս մի քիչ խառը ստացվեց, քանի որ գրում ընդհատումներով։ Բայց, ընդհանուր առմամբ, արդեն գրեցի այն առաջնայինը, որը պետք է գալիս տեխնիկական գիրք պատրաստելու համար։ Այս պահին իմ գրքի համար արած կարգավորումներն ունեն մոտավորապես հետևյալ տեսքը.
+
+```LaTeX
+% arara: xelatex
+% arara: bibtex
+% arara: makeindex
+% arara: xelatex
+
+\documentclass[a4paper,12pt,draft]{report}
+\usepackage[top=1in,bottom=1.2in,left=1.2in,right=1in]{geometry}
+
+\usepackage[dvips]{graphicx}
+\usepackage{fontspec}
+\usepackage{hyperref}
+\usepackage{fancyvrb}
+\usepackage{makeidx}
+\usepackage[Conny]{fncychap}
+
+\setmainfont[Ligatures=TeX,HyphenChar="058A]{GHEAMariam}
+\setsansfont[Ligatures=TeX,HyphenChar="058A]{GHEAGrapalat}
+\setmonofont{DejaVu Sans Mono}
+
+
+\renewcommand{\chaptername}{Զրույց}
+\renewcommand{\contentsname}{Բովանդակություն}
+\renewcommand{\figurename}{Նկար}
+\renewcommand{\tablename}{Աղյուսակ}
+\renewcommand{\appendixname}{Հավելված}
+\renewcommand{\bibname}{Գրականություն}
+\renewcommand{\indexname}{Առարկայական ցանկ}
+
+
+\tolerance=1500
+%\tolerance=10000 % վատ
+\linespread{1.2}
+\frenchspacing
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+
+\RecustomVerbatimEnvironment{Verbatim}{Verbatim}%
+{numbers=left,fontsize=\small,baselinestretch=1}
+
+\makeindex
+
+\begin{document}
+
+\input{vcl-title.tex}
+\input{vcl-copyright.tex}
+
+\tableofcontents
+
+% գրքի գլուխները
+\input{chapter00.tex}
+\input{chapter01.tex}
+\input{chapter02.tex}
+\input{chapter03.tex}
+\input{chapter04.tex}
+\input{chapter05.tex}
+\input{chapter06.tex}
+\input{chapter07.tex}
+\input{chapter08.tex}
+\input{chapter09.tex}
+\input{chapter10.tex}
+\input{chapter11.tex}
+
+% գրականության ցանկը
+\bibliographystyle{plain}
+\bibliography{vcl-book}
+
+% առարկայական ցանկը
+\printindex
+
+% վերջին էջը
+\input{vcl-zpage.tex}
+
+\end{document}
+```
