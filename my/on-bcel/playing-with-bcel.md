@@ -32,6 +32,22 @@ public class Point {
 
 ## Դասի անդամների թվարկում
 
+Շատ հեշտ է գրել մեթոդ, որն արտածում է տրված դասի բոլոր անդամների ու մեթոդների անուններն իրենց տիպերի հետ։ Դրա համար պետք է BCEL-ի `ClassParser`-ով ստեղծել `JavaClass` օբյեկտ, ապա դրանից վերցնել անդամների ու մեթոդների նկարագրությունները՝ համապատասխանաբար `getFields()` և `getMethods()` մեթոդներով։ Մոտավորապես այսպես.
+
+```Java
+public class Explorer {
+    public static void explore(String file) throws IOException {
+        var cls = new ClassParser(file).parse();
+
+        Arrays.stream(cls.getFields()).forEach(System.out::println);
+        System.out.println();
+        Arrays.stream(cls.getMethods()).forEach(System.out::println);
+    }
+}
+```
+
+
 ## Մեթոդում հաղորդագրության արտածման ավելացում
+
 
 ## Դասում ստատիկ անդամի ու մեթոդի ավելացում
