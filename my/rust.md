@@ -36,22 +36,140 @@ fn number_in_words(number: u32) -> String {
     }
 
     if number < 100 {
-        let t = ["", "տաս", "քսան", "երեսուն", "քառասուն", "հիսուն", "վաթսուն", "յոթանասուն", "ութսուն", "իննսուն"][(number / 10) as usize].to_string()
-        return [t, number_in_words(number % 10)].concatenate()
+        let t = ["", "տաս", "քսան", "երեսուն", "քառասուն", "հիսուն", "վաթսուն", "յոթանասուն", "ութսուն", "իննսուն"][(number / 10) as usize].to_string();
+        return [t, number_in_words(number % 10)].concat()
     }
 
     if number < 1000 {
-        let h = number_in_words(number / 100)
-        let t = number_in_words(number % 100)
+        let h = number_in_words(number / 100);
+        let t = number_in_words(number % 100);
         return [h, t].join(" հարյուր ")
     }
 
-    let h = number_in_words(number / 1000)
-    let t = number_in_words(number % 1000)
+    let h = number_in_words(number / 1000);
+    let t = number_in_words(number % 1000);
     return [h, t].join(" հազար ")
 }
 ```
 
-Պատկերացնում եմ, թե որքան ծիծաղելի կերևա այն փորձառու Ռասթ-ծրագրավորողների աչքին։ Եթե անկեղծ լինեմ՝ ինձ էլ այն շատ ծիծաղելի թվաց. պարզ է, որ սա Ռասթ կոդ չէ։ 
+Պատկերացնում եմ, թե որքան ծիծաղելի կերևա այն փորձառու Ռասթ-ծրագրավորողների աչքին։ այնուամենայնիվ, թեև սա այնքան էլ նման չէ Ռասթ ոճով գրված ծրագրի, այն իր խնդիրը կատարում է։ Կարող եմ ցույց տալ։ Այսպես.
 
+```Rust
+fn main() {
+    assert_eq!("երեք հարյուր քսանմեկ հազար ութ հարյուր յոթանասունվեց", number_in_words(321876))
+}
+```
+
+Հաջորդ երկու կարևոր կետերը, որ սովորեցի, հետևյալներն են. ա) ֆունկցիայում վերջին հաշվարկվաշ արժեքը համարվում է ֆունկցիայի վերադարձրած արժեք, բ) `if`-ը կարելի է գրել և որպես հրաման, և որպես արտահայտություն։ Հետևաբար, `number_in_words` ֆունկցիայի մի քիչ լավացրած տարբերակը կարող է լինել այսպիսին.
+
+
+```Rust
+fn number_in_words(number: u32) -> String {
+    if number < 10 {
+        ["", "մեկ", "երկու", "երեք", "չորս", "հինգ", "վեց", "յոթ", "ութ", "ինն"][number as usize].to_string()
+    }
+    else if number < 100 {
+        let t = ["", "տաս", "քսան", "երեսուն", "քառասուն", "հիսուն", "վաթսուն", "յոթանասուն", "ութսուն", "իննսուն"][(number / 10) as usize].to_string();
+        [t, number_in_words(number % 10)].concat()
+    }
+    else if number < 1000 {
+        let h = number_in_words(number / 100);
+        let t = number_in_words(number % 100);
+        [h, t].join(" հարյուր ")
+    }
+    else {
+        let h = number_in_words(number / 1000);
+        let t = number_in_words(number % 1000);
+        [h, t].join(" հազար ")
+    }
+}
+```
+
+Հեռացրել եմ `return`-ները և `if`-ը դարձրել եմ արտահայտություն։ Բայց հենց նույն ժամանակ էլ տեսա, որ այս և նմանատիպ դեպքերում ավելի հարմար է օգտագործել ոչ թե `if` կառուցվածքը, այլ `match`-ը։ Վերջինս, ինչպես երևում է անունից, վերցնում է որևէ արժեք և փորձում է այն համապատասխանեցնել իր մարմնում սահմանված ճյուղերից որևէ մեկին։ Նորից եմ ձևափոխում `number_in_words` ֆունկցիան.
+
+```Rust
+fn number_in_words(number: u32) -> String {
+    match number {
+        0..=9 => {
+            ["", "մեկ", "երկու", "երեք", "չորս", "հինգ", "վեց", "յոթ", "ութ", "ինը"][number as usize].to_string()
+        },
+        10..=99 => {
+            let denary = ["", "տաս", "քսան", "երեսուն", "քառասուն", "հիսուն", "վաթսուն", "յոթանասուն", "ութսուն", "իննսուն"][(number / 10) as usize].to_string();
+            [denary, number_in_words(number % 10)].concat()
+        },
+        100..=999 => {
+            let h = number_in_words(number / 100);
+            let t = number_in_words(number % 100);
+            [h, t].join(" հարյուր ")
+        },
+        _ => {
+            let h = number_in_words(number / 1000);
+            let t = number_in_words(number % 1000);
+            [h, t].join(" հազար ")
+        }
+    }
+}
+```
+
+Այս ձևափոխություններից հետո նորից մի քանի ստուգումներ ավելացրեցի ու պարզեցի, որ ինչ-որ դեպքերում ստանում եմ սխալ արդյունքներ։ Օրինակ, `10` թվի համար `տասը` բառի փոխարեն ստանում եմ `տաս`, կամ `19` թվի համար ստանում եմ `տասինը`, այլ ոչ թե `տասնինը`։ Հերթական ձևափոխության մեջ ուղղելու եմ այս թերությունը, բայց մինչ այդ կոդը տրոհեմի մի քանի ֆունկցիաների։
+
+Միանիշ թվերի համար սահմանում եմ `single_digit` ֆունկցիան.
+
+```Rust
+fn single_digit(number: u32) -> String {
+    ["", "մեկ", "երկու", "երեք", "չորս", "հինգ", 
+    "վեց", "յոթ", "ութ", "ինը"][number as usize].to_string()
+}
+```
+
+Երկնիշ թվերի համար՝ `two_digit`-ը.
+
+```Rust
+fn two_digit(number: u32) -> String {
+    let denary = ["", "տաս", "քսան", "երեսուն", "քառասուն",
+        "հիսուն", "վաթսուն", "յոթանասուն", "ութսուն", "իննսուն"
+    ][(number / 10) as usize].to_string();
+    [denary, number_in_words(number % 10)].concat()
+}
+```
+
+`match` կառուցվածքի երրորդ ու չորրորդ ճյուղերում գրված է իրար շատ նման տեքստ. դա էլ եմ սահմանել որպես առանձին ֆունկցիա։
+
+```Rust
+fn compose(number: u32, limit: u32, sep: &str) -> String {
+    let h = number_in_words(number / limit);
+    let t = number_in_words(number % limit);
+    [h, t].join(sep)   
+}
+```
+
+Այսքանից հետո արդեն `number_in_words` ֆունկցիան ստանում  է հետևյալ սեղմ տեքստը.
+
+```Rust
+fn number_in_words(number: u32) -> String {
+    match number {
+        0..=9 => single_digit(number),
+        10..=99 => two_digit(number),
+        100..=999 => compose(number, 100, " հարյուր "),
+        _ =>  compose(number, 1000, " հազար ")
+    }
+}
+```
+
+Հիմա խմբագրեմ `two_digit` ֆունկցիան ու ուղղեմ `10` թվի բառային արտահայտության հետ կապված թերությունը։ Մի քանի փորձերից հետո ստացա հետևյալը.
+
+```Rust
+fn two_digit(number: u32) -> String {
+    let unit = number_in_words(number % 10);
+
+    let mut denary = ["", "տասն", "քսան", "երեսուն", 
+        "քառասուն", "հիսուն", "վաթսուն", "յոթանասուն", 
+        "ութսուն", "իննսուն"][(number / 10) as usize].to_string();
+    if denary == "տասն" && unit.is_empty() {
+        denary = "տասը".to_string()
+    }
+
+    [denary, unit].concat()
+}
+```
 
