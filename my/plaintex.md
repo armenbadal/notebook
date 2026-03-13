@@ -52,7 +52,7 @@ XeTeX-ը։ Դրան հասանելի են համակարգում տեղադրվ�
 
 ## Երկար վերնագիր
 
-```
+```tex
 \font\titlefont="GHEAGrapalat/B" at 12pt
 
 \def\chapter#1{
@@ -63,7 +63,7 @@ XeTeX-ը։ Դրան հասանելի են համակարգում տեղադրվ�
 
 ## Մաթեմատիկայի վանդակներ
 
-```
+```tex
 \newdimen\onerow \onerow5mm
 \newdimen\freespace
 \newbox\mathcell
@@ -90,8 +90,7 @@ XeTeX-ը։ Դրան հասանելի են համակարգում տեղադրվ�
 
 ## Փորձ ֆայլերի հետ
 
-```
-
+```tex
 \def\insertqr#1{%
   \immediate\write18{python createqr.py #1}
   myau
@@ -103,7 +102,6 @@ XeTeX-ը։ Դրան հասանելի են համակարգում տեղադրվ�
 \immediate\closeout5
 \input a.txt
 }
-
 
 % - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Here is:
@@ -117,14 +115,13 @@ etude one
   a 1 white pown
 }
 
-
 \bye
 ```
 
 
 ## Տողադարձի փորձարկում, LaTeX
 
-```
+```tex
 \documentclass{report}
 
 \usepackage{fontspec}
@@ -149,7 +146,7 @@ etude one
 
 ## LuaTeX-ում հայերեն տեքստ և տողադարձ
 
-```
+```tex
 \input luaotfload.sty
 \font\arm="GHEA Mariam:mode=node;script=latn;+liga;+kern" at 12pt
 \arm
