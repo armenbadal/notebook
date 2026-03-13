@@ -139,7 +139,13 @@ etude one
 \begin{document}
 \chapter{Երբեք խոսքի մի բռնվեք անծանոթ մարդկանց հետ}
 
-Մի անգամ, գարնանը, անասելի շոգ մայրամուտին, Մոսկվայում, Պատրիարքական լճի մոտ երկու քաղաքացի հայտնվեցին։ Նրանցից առաջինը ամառային մոխրագույն զգեստով էր, կարճահասակ, գեր, ճաղատ, բարեձեւ շլյապան երկծալ բռնած ձեռքում, իսկ խնամքով սափրված դեմքի վրա անբնական չափերի, սեւ եղջյուրի շրջանակով ակնոց էր կրում։ Երկրորդը թիկնեղ, շեկ, գիսախռիվ, վանդականախշ կեպին ծոծրակին քաշած երիտասարդ էր՝ քառեկավոր վերնաշապիկով, ճմրթված սպիտակ շալվարով ու սեւ չստերով։
+Մի անգամ, գարնանը, անասելի շոգ մայրամուտին, Մոսկվայում, Պատրիարքական 
+լճի մոտ երկու քաղաքացի հայտնվեցին։ Նրանցից առաջինը ամառային մոխրագույն 
+զգեստով էր, կարճահասակ, գեր, ճաղատ, բարեձեւ շլյապան երկծալ բռնած ձեռքում, 
+իսկ խնամքով սափրված դեմքի վրա անբնական չափերի, սեւ եղջյուրի շրջանակով 
+ակնոց էր կրում։ Երկրորդը թիկնեղ, շեկ, գիսախռիվ, վանդականախշ կեպին ծոծրակին 
+քաշած երիտասարդ էր՝ քառեկավոր վերնաշապիկով, ճմրթված սպիտակ շալվարով 
+ու սեւ չստերով։
 \end{document}
 ```
 
@@ -168,4 +174,31 @@ etude one
 Բարեւ ա՜շխա՞րհ, վն, մն, եւ
 
 \bye
+```
+
+
+## Գլխատառ
+
+```tex
+\input luaotfload.sty
+\font\armfont = "GHEA Mariam:mode=harf;script=armn;+liga;+kern" at 12pt
+\armfont
+\baselineskip=14pt
+
+\saveimageresource width 0.20\hsize {big-letter-ayb-i.png}
+\newcount\symbolglyph
+\symbolglyph = \lastsavedimageresourceindex
+\def\sym{\leavevmode\useimageresource \symbolglyph}
+
+Բարեւ \sym{} աշխարհ։
+
+Սա հայերե՞ն է, Ի՞նչ, ո՞վ, հե՜յ։
+
+\useimageresource\symbolglyph
+\vskip-4\baselineskip\noindent\hangindent=0.24\hsize\hangafter=-4
+This is a text This is a text This is a text This is a text This is a text 
+This is a text This is a text This is a text This is a text This is a text 
+This is a text This is a text This is a text This is a text This is a text 
+
+\bye 
 ```
